@@ -1,5 +1,5 @@
 {
-  "project" : "Pyramid Application",
+  "project" : "Flask Application",
   "project_version" : "1.0.0",
   "project_description" : "A Flask Runner Application",
   "author": "Asif Mahmud Shimon",
