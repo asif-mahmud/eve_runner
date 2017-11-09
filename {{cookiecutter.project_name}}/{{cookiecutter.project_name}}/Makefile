@@ -1,7 +1,7 @@
 APP_NAME={{cookiecutter.project_name}}
 APP_PATH=${APP_NAME}.application
 
-all: setup initdb run
+all: initdb migrate upgrade run
 
 run:
 	gunicorn --paste gunicorn/dev.ini
@@ -11,9 +11,6 @@ run_prod:
 
 run_tests:
 	pytest
-
-setup:
-	pip install -e . --upgrade
 
 initdb:
 	FLASK_APP=${APP_PATH} flask db init
