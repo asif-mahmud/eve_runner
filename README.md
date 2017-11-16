@@ -31,7 +31,8 @@ You only need to install `cookiecutter` python package. After that run -
 cookiecutter https://github.com/asif-mahmud/eve_runner.git
 ```
 
-to create a project. The open a cmd or terminal inside the newly created directory and run-
+to create a project. 
+Then open a cmd or terminal inside the newly created directory and run-
 
 ```
 pip install -e . --upgrade
