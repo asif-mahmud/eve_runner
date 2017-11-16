@@ -1,7 +1,7 @@
 {
-  "project" : "Flask Application",
+  "project" : "Eve Application",
   "project_version" : "1.0.0",
-  "project_description" : "A Flask Runner Application",
+  "project_description" : "An Eve Runner Application",
   "author": "Asif Mahmud Shimon",
   "email": "ams.eee09@gmail.com",
   "url" : "https://www.embeddedgamers.com",

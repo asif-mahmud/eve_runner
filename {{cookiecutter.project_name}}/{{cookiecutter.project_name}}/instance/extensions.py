@@ -1,10 +1,7 @@
-import flask_sqlalchemy
+"""Register flask extensions here."""
 import flask_migrate
-
-db = flask_sqlalchemy.SQLAlchemy()
 
 
 def register_extensions(app):
-    # SQLAlchemy specific
-    db.init_app(app)
-    migrate = flask_migrate.Migrate(app, db)
+    # SQLAlchemy Migration Facility
+    migrate = flask_migrate.Migrate(app, app.data.driver)

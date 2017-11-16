@@ -9,11 +9,13 @@ def scan_models(app):
     """Scan the package for model definitions."""
     for dirpath, dirnames, filenames in os.walk(app.root_path):
         head, tail = os.path.split(dirpath)
-        if tail in app.config['MODEL_DIRS']:
+        if tail in app.config.get('MODEL_DIRS', ['models', ]):
             # there should be models
             for filename in filenames:
                 if filename.endswith('.py') and \
-                        filename not in app.config['MODEL_EXCLUDE_FILES']:
+                        filename not in app.config.get(
+                            'MODEL_EXCLUDE_FILES', ['__init__.py', ]
+                        ):
                     # lets import the module
                     filename_no_ext, _ = os.path.splitext(
                         os.path.join(
@@ -34,8 +36,8 @@ def scan_blueprints(app):
     Blueprints may be implemented by factory model. Any package under
     `blueprints` package will be considered as a blueprint and will be attempted
     to register. To allow registering, make a function named `create_blueprint`
-    which must return `(blueprint, prefix)` pair where `blueprint` is the 
-    `flask.Blueprint` instance and `prefix` is the prefix for loading the 
+    which must return `(blueprint, prefix)` pair where `blueprint` is the
+    `flask.Blueprint` instance and `prefix` is the prefix for loading the
     blueprint at. Another way will be setting two package variables - `__blueprint__`
     for `flask.Blueprint` instance and `__prefix__` for url prefix.
     """
@@ -66,3 +68,35 @@ def scan_blueprints(app):
                     getattr(factory_module, '__blueprint__'),
                     url_prefix=getattr(factory_module, '__prefix__')
                 )
+
+
+def register_resources(app):
+    """Register the resources defined in `instance.config.schema`.
+
+    Please it's docstring for understanding how to define resource
+    schema.
+    """
+    from .db import Base
+    from .configs.schema import EVE_SQL_SCHEMA
+    from eve_sqlalchemy.config import DomainConfig, ResourceConfig
+
+    tables_found = {}
+    for table, options in EVE_SQL_SCHEMA:
+        for key in Base._decl_class_registry:
+            if hasattr(Base._decl_class_registry[key], '__tablename__') and \
+                    Base._decl_class_registry[key].__tablename__ == table:
+                tables_found[table] = ResourceConfig(
+                    Base._decl_class_registry[key]
+                )
+                break
+    rendered_schema = DomainConfig(tables_found).render()
+    for table, options in EVE_SQL_SCHEMA:
+        rendered_schema[table].update(options)
+
+    db = app.data.driver
+    Base.metadata.bind = db.engine
+    db.Model = Base
+
+    # finally we update the schema for eve application
+    for t in rendered_schema:
+        app.register_resource(t, rendered_schema[t])

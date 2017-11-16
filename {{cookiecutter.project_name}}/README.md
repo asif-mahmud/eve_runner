@@ -1,2 +1,2 @@
-Example Readme for {{cookiecutter.project}}
+Readme for {{cookiecutter.project}}
 ==============================================
