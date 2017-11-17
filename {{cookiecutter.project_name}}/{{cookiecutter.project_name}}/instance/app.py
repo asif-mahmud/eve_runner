@@ -5,10 +5,10 @@ import logging
 
 import eve
 import eve_sqlalchemy as es
-import eve_sqlalchemy.validation as es_v
 
 from . import utils
 from . import extensions
+from . import db
 
 
 def create_app():
@@ -25,7 +25,8 @@ def create_app():
     app = eve.Eve(
         __package__.split('.')[0],
         settings=app_settings,
-        validator=es_v.ValidatorSQL,
+        validator=db.UUIDValidator,
+        json_encoder=db.UUIDEncoder,
         data=es.SQL,
     )
 

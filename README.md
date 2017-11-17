@@ -18,6 +18,7 @@ This is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) templat
 * Auto loads SQLAlchemy models at the application startup. So no need to import all model modules by hand.
 * A declarative `Base` class is prepared to suite `Eve` application structure
 * [Eve SQLAlchemy](https://eve-sqlalchemy.readthedocs.io/en/latest/) is preconfigured. You only need to define the model schema for `Eve` application. See below.
+* Ready to work with `UUID` type value in models. For details see the `schema.py`.
 
 ### License
 
@@ -69,6 +70,12 @@ by modifying the following configurations-
 
 All the modules available inside the `MODEL_DIRS` excluding the modules in `MODEL_EXCLUDE_FILES` will be imported. So define your models in those modules.
 
+**Update:** A new configuration option added in version 3.0.0 - `DOMAIN_SCHEMA_APPEND`. This is a boolean flag
+to control whether or not your defined schema options in `APP_SCHEMA` will be appended or replaced. This 
+basically is saying that, if this options is `True` then append any new value in any `list` type configuration
+option value to the existing or new option. By default it is `False` saying any list type option will replaced by
+your defined option in schema file. 
+
 ### Eve DOMAIN Schema
 
 This was particularly tricky because `Eve-SQLAlchemy` needs model classes to register resources. But it's made easy here. All you need is to know the table name of you models. Now you define the `DOMAIN` schema in
@@ -92,6 +99,7 @@ development mode.
 5. `make downgrade`: Downgrade one revision
 6. `make run`: Run the application in  development mode
 7. `make run_prod`: Run the application in production mode
+8. `make run_tests`: Run tests
 
 The makefile is inside the application directory so you will need to open cmd or terminal inside the application directory.
 
