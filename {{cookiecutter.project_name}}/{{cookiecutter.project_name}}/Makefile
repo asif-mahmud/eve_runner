@@ -4,10 +4,10 @@ APP_PATH=${APP_NAME}.application
 all: initdb migrate upgrade run
 
 run:
-	gunicorn --paste gunicorn/dev.ini
+	uwsgi --ini uwsgi/dev.ini
 
 run_prod:
-	PROD=1 gunicorn --paste gunicorn/prod.ini
+	uwsgi --ini uwsgi/prod.ini
 
 run_tests:
 	pytest

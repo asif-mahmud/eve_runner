@@ -11,14 +11,16 @@ This is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) templat
 * Factory based application structure
 * Blueprints are auto registered (yes automatically registered! see below)
 * Separate configuration for development and production application
-* Uses [Gunicorn](http://gunicorn.org/) for both development and production server
-* Uses [Eventlet](http://eventlet.net/) worker to allow implementing asynchronous apps(i.e SocketIO by [Flask-SocketIO](https://flask-socketio.readthedocs.io))
+* Uses [Gunicorn](http://gunicorn.org/) for both development and production server (**Deprecated** from v4.0.0)
+* Uses [Eventlet](http://eventlet.net/) worker to allow implementing asynchronous apps(i.e SocketIO by [Flask-SocketIO](https://flask-socketio.readthedocs.io)) (**Deprecated** from v4.0.0)
 * Only assumption made during making the template is that the developer may want to use [SQLAlchemy](https://www.sqlalchemy.org/), so [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org) and [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/) are preconfigured. The developer only has to change SQLAlchemy related configurations. This can be changed or removed to use other options very easily.
 * Easy `Makefile` syntax for running, testing, migrating application and it's databases.
 * Auto loads SQLAlchemy models at the application startup. So no need to import all model modules by hand.
 * A declarative `Base` class is prepared to suite `Eve` application structure
 * [Eve SQLAlchemy](https://eve-sqlalchemy.readthedocs.io/en/latest/) is preconfigured. You only need to define the model schema for `Eve` application. See below.
 * Ready to work with `UUID` type value in models. For details see the `schema.py`.
+* Uses `uWSGI` out of the box using different config files for development and production release
+* `uWSGI` is configured to use `Gevent` and `Websockets` by default
 
 ### License
 

@@ -9,6 +9,6 @@ the app.
 
 This is also used for database migrations by `Flask-Migrate`.
 """
-from . import main
+from {{cookiecutter.project_name}} import main
 
 application = main({})

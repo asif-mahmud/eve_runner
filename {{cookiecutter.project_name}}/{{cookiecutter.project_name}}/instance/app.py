@@ -32,10 +32,6 @@ def create_app():
 
     app.config.update(app_settings)
 
-    # try extending loggers to use gunicorn logger
-    gunicorn_logger = logging.getLogger('gunicorn.error')
-    app.logger.handlers.extend(gunicorn_logger.handlers)
-
     # register the extensions upfront
     extensions.register_extensions(app)
 
