@@ -117,6 +117,8 @@ Flask shell is a convenient tool to test your app quickly. To run flask shell se
 `FLASK_APP` to `your_app_name.application` prior to run `flask shell` command. `PROD` variable is effective
 here as well. Use it to switch configuration.
 
+**Note:** This was accidentally excluded from version 4.0.0. Any other versions have this feature available.
+
 ### Running tests
 
 Write your tests subclassing `unittest.TestCase` and you are good to go. you can run tests in a number of 
