@@ -43,4 +43,6 @@ APP_CONFIG = dict(
     URL_PREFIX='api',
     DOMAIN=dict(),  # empty domain, it will be updated when the
                     # models are loaded first
+    DOMAIN_SCHEMA_APPEND=False, # Whether or not schema options will be
+                                # appended or replaced
 )

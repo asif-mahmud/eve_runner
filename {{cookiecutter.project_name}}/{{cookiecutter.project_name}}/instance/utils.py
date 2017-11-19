@@ -15,7 +15,7 @@ def scan_models(app):
                 if filename.endswith('.py') and \
                         filename not in app.config.get(
                             'MODEL_EXCLUDE_FILES', ['__init__.py', ]
-                        ):
+                ):
                     # lets import the module
                     filename_no_ext, _ = os.path.splitext(
                         os.path.join(
@@ -70,6 +70,24 @@ def scan_blueprints(app):
                 )
 
 
+def update_dict(target, update, append=False):
+    for k, v in update.items():
+        if k not in target.keys():
+            target[k] = v
+        else:
+            if isinstance(target[k], dict):
+                update_dict(target[k], v)
+            elif isinstance(target[k], list):
+                if append:
+                    for i in update[k]:
+                        if not i in target[k]:
+                            target[k].append(i)
+                else:
+                    target[k] = v
+            else:
+                target[k] = v
+
+
 def register_resources(app):
     """Register the resources defined in `instance.config.schema`.
 
@@ -91,7 +109,13 @@ def register_resources(app):
                 break
     rendered_schema = DomainConfig(tables_found).render()
     for table, options in EVE_SQL_SCHEMA:
-        rendered_schema[table].update(options)
+        update_dict(
+            rendered_schema[table],
+            options,
+            append=app.config.get('DOMAIN_SCHEMA_APPEND', False)
+        )
+
+    # app.logger.info(rendered_schema)
 
     db = app.data.driver
     Base.metadata.bind = db.engine

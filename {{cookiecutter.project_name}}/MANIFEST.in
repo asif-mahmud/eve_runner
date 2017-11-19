@@ -1,5 +1,5 @@
 graft {{cookiecutter.project_name}}/blueprints/*/static
 graft {{cookiecutter.project_name}}/blueprints/*/templates
-graft {{cookiecutter.project_name}}/gunicorn
+graft {{cookiecutter.project_name}}/uwsgi
 include {{cookiecutter.project_name}}/Makefile
 graft {{cookiecutter.project_name}}/logs
