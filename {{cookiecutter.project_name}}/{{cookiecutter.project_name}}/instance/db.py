@@ -5,9 +5,10 @@ import uuid
 import sqlalchemy as sa
 import sqlalchemy.ext.declarative as declarative
 import sqlalchemy.schema as schema
-import sqlalchemy.dialects.postgresql as postgresql
+# import sqlalchemy.dialects.postgresql as postgresql
 from eve.io.base import BaseJSONEncoder
 from eve_sqlalchemy.validation import ValidatorSQL
+from werkzeug.datastructures import FileStorage
 
 # Recommended naming convention used by Alembic, as various different database
 # providers will autogenerate vastly different names making migrations more
@@ -31,13 +32,14 @@ class ModelBase(object):
         4. a _etag column for eve 
     """
 
-    id = sa.Column(
-        postgresql.UUID(as_uuid=True),
-        primary_key=True,
-        server_default=sa.func.uuid_generate_v4(),
-    )
-    _created = sa.Column(sa.DateTime, server_default=sa.func.now())
-    _updated = sa.Column(sa.DateTime, server_default=sa.func.now(),
+    # id = sa.Column(
+    #     postgresql.UUID(as_uuid=True),
+    #     primary_key=True,
+    #     server_default=sa.func.uuid_generate_v4(),
+    # )
+    id = sa.Column(sa.Integer, primary_key=True)
+    _created = sa.Column(sa.DateTime, default=sa.func.now())
+    _updated = sa.Column(sa.DateTime, default=sa.func.now(),
                          onupdate=sa.func.now())
     _etag = sa.Column(sa.Text, nullable=False)
 
@@ -82,11 +84,17 @@ class UUIDValidator(ValidatorSQL):
 
     Extends the ValidatorSQL validator adding support for the uuid data-type
     """
-    def _validate_type_uuid(self, value):
+    def _validate_type_uuid(self, field, value):
+        """Enable UUID type field."""
         try:
             uuid.UUID(value)
         except ValueError:
             pass
+
+    def _validate_type_media(self, field, value):
+        """Enable handling media type field."""
+        if not isinstance(value, FileStorage):
+            self._error(field, "File was expected, got '%s' instead." % value)
 
 metadata = schema.MetaData(naming_convention=NAMING_CONVENTION)
 Base = declarative.declarative_base(metadata=metadata, cls=ModelBase)

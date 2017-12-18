@@ -21,6 +21,7 @@ This is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) templat
 * Ready to work with `UUID` type value in models. For details see the `schema.py`.
 * Uses `uWSGI` out of the box using different config files for development and production release
 * `uWSGI` is configured to use `Gevent` and `Websockets` by default
+* Eve `media` type support out-of-box.
 
 ### License
 
