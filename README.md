@@ -1,9 +1,9 @@
 Eve Runner
 =========================
 
-This is a [Eve](http://python-eve.org/) project template for large application developers who intend to modularise their application by utilizing `flask.Blueprint`. 
+This is an [Eve](http://python-eve.org/) project template for large application developers who intend to modularise their application by utilizing `flask.Blueprint` in the simplest manner. 
 
-This is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) template, so to generate a project using this template use `cookiecutter`.
+This is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) template, so to generate a project using this template one must use `python cookiecutter`.
 
 ### Features
 
@@ -11,52 +11,74 @@ This is a [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) templat
 * Factory based application structure
 * Blueprints are auto registered (yes automatically registered! see below)
 * Separate configuration for development and production application
-* Uses [Gunicorn](http://gunicorn.org/) for both development and production server (**Deprecated** from v4.0.0)
-* Uses [Eventlet](http://eventlet.net/) worker to allow implementing asynchronous apps(i.e SocketIO by [Flask-SocketIO](https://flask-socketio.readthedocs.io)) (**Deprecated** from v4.0.0)
-* Only assumption made during making the template is that the developer may want to use [SQLAlchemy](https://www.sqlalchemy.org/), so [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org) and [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/) are preconfigured. The developer only has to change SQLAlchemy related configurations. This can be changed or removed to use other options very easily.
-* Easy `Makefile` syntax for running, testing, migrating application and it's databases.
+* Can use [Gunicorn](http://gunicorn.org/) for both development and production server (**Note** optional from v5.0.0)
+* Uses [Eventlet](http://eventlet.net/) worker if using [Gunicorn](http://gunicorn.org/) to allow implementing asynchronous apps(i.e SocketIO by [Flask-SocketIO](https://flask-socketio.readthedocs.io)) (**Note** optional from v5.0.0)
+* Only assumption made during making the template is that the developer may want to use [SQLAlchemy](https://www.sqlalchemy.org/), so [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org) and [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/) are preconfigured. The developer only has to change SQLAlchemy related configurations.
+* Easy `Makefile` syntax for running, testing, migrating application and it's databases including both development and production variants.
 * Auto loads SQLAlchemy models at the application startup. So no need to import all model modules by hand.
 * A declarative `Base` class is prepared to suite `Eve` application structure
-* [Eve SQLAlchemy](https://eve-sqlalchemy.readthedocs.io/en/latest/) is preconfigured. You only need to define the model schema for `Eve` application. See below.
+* [Eve-SQLAlchemy](https://eve-sqlalchemy.readthedocs.io/en/latest/) is preconfigured. You only need to define the model schema for `Eve` application. See below.
 * Ready to work with `UUID` type value in models. For details see the `schema.py`.
-* Uses `uWSGI` out of the box using different config files for development and production release
-* `uWSGI` is configured to use `Gevent` and `Websockets` by default
+* Can use `uWSGI` out of the box using different config files for development and production release.(**Note** optional from v5.0.0)
+* `uWSGI` is configured to use `Gevent` and `Websockets` by default. (**Note** optional from v5.0.0)
 * Eve `media` type support out-of-box.
+* Convenient command line application running options. (New in v5.0.0)
 
 ### License
 
 GPL v2
 
-### Installation
+### Creating new project
 
-You only need to install `cookiecutter` python package. After that run -
+You only need to install `cookiecutter` python package either globally or in a virtual environment. After that run -
 
 ```
 cookiecutter https://github.com/asif-mahmud/eve_runner.git
 ```
 
 to create a project. 
-Then open a cmd or terminal inside the newly created directory and run-
+
+At this point you have 3 options for running the application -
+
+1. **Using Flask Command**: To run the application you've just created by `flask run` command, you need to install
+the app using the following command (use virtual env if you prefer) -
 
 ```
 pip install -e . --upgrade
 ```
 
-To upgrade and install your awesome application. Voila you are ready to roll.
+2. **Using Gunicorn**: If you are on unix based platform or deploying the application you may want to use `Gunicorn` server to serve your app. On development run, `Gunicorn` is configured to watch file changes and reload your application. To do that you need to install it using the following command (use virtual env if you prefer) -
+
+```
+pip install -e .[gunicorn] --upgrade
+```
+
+3. **Using uWSGI**: If you are on unix based platform or deploying the application you may want to use `uWSGI` server to serve your app. On development run, `uWSGI` is configured to watch file changes and reload your application. To do that you need to install it using the following command (use virtual env if you prefer) -
+
+```
+pip install -e .[uwsgi] --upgrade
+```
+uWSGI
+Now you can run the application by one of the following commands depending on your choice and platform -
+
+1. `make run`
+2. `python -m <your_app_name> -s`
+
+Voila you are ready to roll.
 
 ### Blueprints
 
 Creating blueprints is made super easy here. You only need to create you blueprint in a package under
 `blueprints` package and do any one of the following-
 
-1. Make a `create_blueprint` factory function in `__init__.py` or expose it somehow from your blueprint package which will return a `tupple` like `(blueprint_instance, url_prefix)`. You blueprints will be auto registered when the application starts up.
-2. Make two variables names `__blueprint__` and `__prefix__` in `__init__.py` or expose them somehow from your blueprint package and you are good to go.
+1. Make a `create_blueprint` factory function in `__init__.py` or expose it somehow from your blueprint package which will return a `tupple` like `(blueprint_instance, url_prefix)`. Your blueprints will be auto registered when the application starts up.
+2. Make two variables named `__blueprint__` and `__prefix__` in `__init__.py` or expose them somehow from your blueprint package and you are good to go.
 
 ### Database models
 
 A declarative base class is ready and exposed to be used in `instance.db` as `Base` with proper naming conventions. This base class has the following attributes predefined -
 
-1. `__tablename__` - this will be autogenerated using your model's class name. For example if your model class is `SomeModel`, the table name will be `some_model`. This is important to understand as you will need it to define `DOMAIN` schema for `Eve`.
+1. `__tablename__` - this will be autogenerated using your model's class name. For example if your model class is `SomeModel`, the table name will be `some_model`. This is important to understand as you will need it to define `DOMAIN` schema for `Eve`. So if a model class is named as `ANEWModel`, the table name will be `a_n_e_w_model`.
 2. `id` - Default is a `sqlalchemy.Integer` type primary key
 3. `_created` - `sqlalchemy.DateTime` type. Needed for `Eve` application
 4. `_updated` - `sqlalchemy.DateTime` type. Needed for `Eve` application
@@ -64,7 +86,7 @@ A declarative base class is ready and exposed to be used in `instance.db` as `Ba
 
 Additionally a default `__repr__` method is implemented which will return `ModelClassName<Model_id>` string.
 
-You can override any of these to better suite your need, but attributes 3-5 are required for `Eve` application schema, so don't chamge them unless you know what you are doing.
+You can override any of these to better suite your need, but attributes 3-5 are required for `Eve` application schema, so don't change them unless you know what you are doing.
 
 All database models will be auto imported at application startup. You can control the scanning procedure
 by modifying the following configurations-
@@ -76,18 +98,17 @@ All the modules available inside the `MODEL_DIRS` excluding the modules in `MODE
 
 **Update:** A new configuration option added in version 3.0.0 - `DOMAIN_SCHEMA_APPEND`. This is a boolean flag
 to control whether or not your defined schema options in `APP_SCHEMA` will be appended or replaced. This 
-basically is saying that, if this options is `True` then append any new value in any `list` type configuration
-option value to the existing or new option. By default it is `False` saying any list type option will replaced by
-your defined option in schema file. 
+basically is saying that, if this option is `True` then append any new value in any `list` type configuration
+option value to the existing or new option. By default it is `False` saying that any list type option will replaced by your defined option in schema file. 
 
 ### Eve DOMAIN Schema
 
-This was particularly tricky because `Eve-SQLAlchemy` needs model classes to register resources. But it's made easy here. All you need is to know the table name of you models. Now you define the `DOMAIN` schema in
-`instance.configs.schema.EVE_SCHEMA` list. Here every element is a `tupple` like this - `(table_name, dict(table_configurations))`. `table_configurations` are the configurations you use to define your schema for `Eve` application. The models will be registered with their configurations at application startup.
+This was particularly tricky because `Eve-SQLAlchemy` needs model classes to register resources. Sometimes it becomes inconvenient to import all the models in some module. Additionally the programming may introduce
+recursive imports. It's been solved here by auto-importing model definitions. Now all you need is to know the table name of you models. You define the `DOMAIN` schema in `instance.configs.schema.EVE_SCHEMA` list. Here every element is a `tupple` like this - `(table_name, dict(table_configurations))`. `table_name` is as it says, the database table name. `table_configurations` are the configurations you use to define your schema for `Eve` application. The models will be registered with their configurations at application startup.
 
 ### Application configuration
 
-Two separate modules are dedicated to define development and production release configuration.
+Two separate modules are dedicated to define development and production release configuration for the application.
 For development configuration use `instance.configs.development.APP_CONFIG` dictionary and for 
 production release use `instance.configs.production.APP_CONFIG` dictionary.
 
@@ -97,15 +118,19 @@ A convenient `Makefile` is prepared for you with the following commands -
 
 1. `make` \ `make all`: Initialize alembic configs, migrate and upgrade and finally run the application in 
 development mode.
-2. `make initdb`: Initialize alembic configs and directories. You need to run this only once.
-3. `make migrate`: Create migration
-4. `make upgrade`: Upgrade database to latest migration
-5. `make downgrade`: Downgrade one revision
-6. `make run`: Run the application in  development mode
-7. `make run_prod`: Run the application in production mode
-8. `make run_tests`: Run tests
+2. `make run_tests`: Run tests
+3. `make initdb`: Initialize alembic configs and directories. You need to run this only once. (in development mode)
+4. `make migrate`: Create migration in development mode
+5. `make upgrade`: Upgrade database to latest migration in development mode
+6. `make downgrade`: Downgrade one revision in development mode
+7. `make run`: Run the application in development mode
+8. `make shell`: Run `flask shell` in development mode
+9. `make uwsgi`: Run `uWSGI` server in development mode
+10. `make gunicorn`: Run `Gunicorn` server in development mode
 
-The makefile is inside the application directory so you will need to open cmd or terminal inside the application directory.
+Commands from 3 to last have their `_prod` variants which will run the specified operation in production mode.
+(i.e `make run_prod`). The makefile is not under python application directory and hereby will not be included 
+in the application package.
 
 ### Switching run mode
 
@@ -120,6 +145,11 @@ Flask shell is a convenient tool to test your app quickly. To run flask shell se
 here as well. Use it to switch configuration.
 
 **Note:** This was accidentally excluded from version 4.0.0. Any other versions have this feature available.
+
+### Command line options
+
+There is a `__main__` module in the application package. So you can run various commands using `python -m <your_app_name>`. Run `python -m <your_app_name> -h` to see a list of options/commands you can run through it.
+You can also look at the makefile for example usage of the command line options.
 
 ### Running tests
 
