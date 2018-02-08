@@ -3,5 +3,3 @@ eve
 eve_sqlalchemy
 flask_sqlalchemy
 flask_migrate
-uwsgi
-gevent

@@ -20,6 +20,17 @@ REQUIREMENTS = []
 TESTS_REQUIREMENTS = [
     'pytest',
 ]
+EXTRAS_REQUIRE = dict(
+    gunicorn=[
+        'gunicorn',
+        'pastedeploy',
+        'eventlet',
+    ],
+    uwsgi=[
+        'uwsgi',
+        'gevent',
+    ]
+)
 CLASSIFIERS = [
     'Development Status :: 1-Alpha',
     'Intended Audience :: Developers',
@@ -54,4 +65,5 @@ setuptools.setup(
     python_requires=PYTHON_VERSIONS,
     install_requires=REQUIREMENTS,
     tests_require=TESTS_REQUIREMENTS,
+    extras_require=EXTRAS_REQUIRE,
 )
