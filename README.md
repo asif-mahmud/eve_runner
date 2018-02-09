@@ -40,25 +40,25 @@ to create a project.
 
 At this point you have 3 options for running the application -
 
-1. **Using Flask Command**: To run the application you've just created by `flask run` command, you need to install
+* **Using Flask Command**: To run the application you've just created by `flask run` command, you need to install
 the app using the following command (use virtual env if you prefer) -
 
 ```
 pip install -e . --upgrade
 ```
 
-2. **Using Gunicorn**: If you are on unix based platform or deploying the application you may want to use `Gunicorn` server to serve your app. On development run, `Gunicorn` is configured to watch file changes and reload your application. To do that you need to install it using the following command (use virtual env if you prefer) -
+* **Using Gunicorn**: If you are on unix based platform or deploying the application you may want to use `Gunicorn` server to serve your app. On development run, `Gunicorn` is configured to watch file changes and reload your application. To do that you need to install it using the following command (use virtual env if you prefer) -
 
 ```
 pip install -e .[gunicorn] --upgrade
 ```
 
-3. **Using uWSGI**: If you are on unix based platform or deploying the application you may want to use `uWSGI` server to serve your app. On development run, `uWSGI` is configured to watch file changes and reload your application. To do that you need to install it using the following command (use virtual env if you prefer) -
+* **Using uWSGI**: If you are on unix based platform or deploying the application you may want to use `uWSGI` server to serve your app. On development run, `uWSGI` is configured to watch file changes and reload your application. To do that you need to install it using the following command (use virtual env if you prefer) -
 
 ```
 pip install -e .[uwsgi] --upgrade
 ```
-uWSGI
+
 Now you can run the application by one of the following commands depending on your choice and platform -
 
 1. `make run`
