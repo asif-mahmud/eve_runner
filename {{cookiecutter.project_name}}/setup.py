@@ -36,11 +36,11 @@ CLASSIFIERS = [
     'Intended Audience :: Developers',
     'Topic :: {{cookiecutter.project}}',
     'License :: GPL version 2',
-    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 2.6',
     'Programming Language :: Python :: 3.4',
 ]
 KEY_WORDS = '{{cookiecutter.project_name}}'
-PYTHON_VERSIONS = '>=2.7, >=3.4'
+PYTHON_VERSIONS = '>=2.6, !=3.0.*, !=3.1.*, !=3.2.*, <4'
 LONG_DESCRIPTION = ''
 
 with open(REQ_FILE_PATH, 'r') as f:

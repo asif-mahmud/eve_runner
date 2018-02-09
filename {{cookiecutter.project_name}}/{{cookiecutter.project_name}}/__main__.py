@@ -44,7 +44,9 @@ def setup_args():
     return parser, vars(parser.parse_args())
 
 
-class BaseProcessSpawner(abc.ABC):
+class BaseProcessSpawner():
+
+    __metaclass__ = abc.ABCMeta
 
     def __init__(self, args):
         self._args = args
